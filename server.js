@@ -17,11 +17,10 @@ const pool = mysql.createPool(config.database);
 
 // Validaciones para pacientes
 const pacienteValidations = [
-  body('ID').notEmpty().withMessage('El id es requerido'),
   body('Nombre').notEmpty().withMessage('El nombre es requerido'),
   body('Direccion').notEmpty().withMessage('La dirección es requerida'),
   body('Numero_Telefono').isInt().withMessage('El número de teléfono debe ser un número entero'),
-  body('Desc_Ciudad').isInt().withMessage('La ciudad es requerida')
+  body('Id_Ciudad').isInt().withMessage('La ciudad es requerida')
 ];
 
 // Validaciones para diagnósticos
@@ -45,13 +44,14 @@ app.post('/api/pacientes', pacienteValidations, async (req, res) => {
   try {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
+      console.error('Errores de validación:', errors.array());
       return res.status(400).json({ errors: errors.array() });
     }
 
-    const { Id_Paciente, Nombre, Direccion, Numero_Telefono, Desc_Ciudad } = req.body;
+    const { Nombre, Direccion, Numero_Telefono, Id_Ciudad } = req.body;
     const [result] = await pool.query(
-      'INSERT INTO pacientes (Id_Paciente, Nombre, Fecha_Nacimiento, Direccion, Numero_Telefono, Ciudad) VALUES (?, ?, CURDATE(), ?, ?, ?)',
-      [Id_Paciente, Nombre, Direccion, Numero_Telefono, Desc_Ciudad]
+      'INSERT INTO pacientes (Nombre, Fecha_Nacimiento, Direccion, Numero_Telefono, Id_Ciudad) VALUES (?, CURDATE(), ?, ?, ?)',
+      [Nombre, Direccion, Numero_Telefono, Id_Ciudad]
     );
     res.status(201).json({ id: result.insertId, message: 'Paciente creado exitosamente' });
   } catch (error) {
@@ -71,12 +71,11 @@ app.put('/api/pacientes/:id', pacienteValidations, async (req, res) => {
       return res.status(400).json({ errors: errors.array() });
     }
 
-  
-    const { Id_Paciente, Nombre, Direccion, Numero_Telefono, Desc_Ciudad } = req.body;
-    
+    const { Nombre, Direccion, Numero_Telefono, Id_Ciudad } = req.body;
+    const { id } = req.params;
     const [result] = await pool.query(
-      ' UPDATE pacientes SET Id_Paciente = ?, Nombre = ?, Direccion = ?, Numero_Telefono = ?, Id_Ciudad = (SELECT Id_Ciudades FROM ciudades WHERE Desc_Ciudad = ?)',
-      [Id_Paciente, Nombre, Direccion, Numero_Telefono, Desc_Ciudad]
+      'UPDATE pacientes SET Nombre = ?, Direccion = ?, Numero_Telefono = ?, Id_Ciudad = ? WHERE Id_Paciente = ?',
+      [Nombre, Direccion, Numero_Telefono, Id_Ciudad, id]
     );
 
     if (result.affectedRows === 0) {

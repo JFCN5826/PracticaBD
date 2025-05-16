@@ -34,13 +34,16 @@ function mostrarSeccion(seccion) {
 document.getElementById('paciente-form').addEventListener('submit', async (e) => {
     e.preventDefault(); 
     const id = document.getElementById('paciente-id').value;
-    const data = {
-        Id_Paciente: parseInt(document.getElementById('paciente-id').value),
+    let data = {
         Nombre: document.getElementById('nombre').value,
         Direccion: document.getElementById('direccion').value,
         Numero_Telefono: parseInt(document.getElementById('telefono').value),
-        Id_Ciudad: document.getElementById('ciudad').value // <---- Asegúrate de que el ID del select sea 'ciudad'
+        Id_Ciudad: parseInt(document.getElementById('ciudad').value)
     };
+    if (id) {
+        data.Id_Paciente = parseInt(id);
+    }
+    console.log(data);
     try {
         const url = id ? `/api/pacientes/${id}` : '/api/pacientes';
         const method = id ? 'PUT' : 'POST';
@@ -57,6 +60,7 @@ document.getElementById('paciente-form').addEventListener('submit', async (e) =>
         ocultarFormularioPaciente(); 
         mostrarAlerta('Paciente guardado exitosamente', 'success'); 
     } catch (error) {
+        console.error(error);
         mostrarAlerta(error.message); 
     }
 });
@@ -265,6 +269,7 @@ document.getElementById('examen-form').addEventListener('submit', async (e) => {
         Fecha_Realizacion: document.getElementById('examen-fecha').value,
         Id_Paciente: parseInt(document.getElementById('examen-paciente').value)
     };
+    console.log(data);
     try {
         const url = id ? `/api/examenes/${id}` : '/api/examenes';
         const method = id ? 'PUT' : 'POST';
@@ -281,6 +286,7 @@ document.getElementById('examen-form').addEventListener('submit', async (e) => {
         ocultarFormularioExamen();
         mostrarAlerta('Examen guardado exitosamente', 'success');
     } catch (error) {
+        console.error(error);
         mostrarAlerta(error.message);
     }
 });
@@ -356,6 +362,7 @@ document.getElementById('medicamento-form').addEventListener('submit', async (e)
         Dosis: document.getElementById('medicamento-dosis').value,
         Instrucciones: document.getElementById('medicamento-instrucciones').value
     };
+    console.log(data);
     try {
         const url = id ? `/api/medicamentos/${id}` : '/api/medicamentos';
         const method = id ? 'PUT' : 'POST';
@@ -372,6 +379,7 @@ document.getElementById('medicamento-form').addEventListener('submit', async (e)
         ocultarFormularioMedicamento();
         mostrarAlerta('Medicamento guardado exitosamente', 'success');
     } catch (error) {
+        console.error(error);
         mostrarAlerta(error.message);
     }
 });
@@ -450,6 +458,7 @@ document.getElementById('plan-form').addEventListener('submit', async (e) => {
         Tratamiento: document.getElementById('plan-tratamiento').value,
         Fecha: document.getElementById('plan-fecha').value
     };
+    console.log(data);
     try {
         const url = id ? `/api/plantratamiento/${id}` : '/api/plantratamiento';
         const method = id ? 'PUT' : 'POST';
@@ -466,6 +475,7 @@ document.getElementById('plan-form').addEventListener('submit', async (e) => {
         ocultarFormularioPlan();
         mostrarAlerta('Plan guardado exitosamente', 'success');
     } catch (error) {
+        console.error(error);
         mostrarAlerta(error.message);
     }
 });
@@ -545,6 +555,7 @@ document.getElementById('resultado-form').addEventListener('submit', async (e) =
         Valor: parseInt(document.getElementById('resultado-valor').value),
         Fecha: document.getElementById('resultado-fecha').value
     };
+    console.log(data);
     try {
         const url = id ? `/api/resultado_lab/${id}` : '/api/resultado_lab';
         const method = id ? 'PUT' : 'POST';
@@ -561,6 +572,7 @@ document.getElementById('resultado-form').addEventListener('submit', async (e) =
         ocultarFormularioResultado();
         mostrarAlerta('Resultado guardado exitosamente', 'success');
     } catch (error) {
+        console.error(error);
         mostrarAlerta(error.message);
     }
 });
