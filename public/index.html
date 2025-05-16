@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sistema de Gestión Médica</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="styles.css" rel="stylesheet">
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+        <div class="container">
+            <a class="navbar-brand" href="#">Sistema Médico</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav">
+                    <li class="nav-item">
+                        <a class="nav-link" href="#" onclick="mostrarSeccion('pacientes')">Pacientes</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#" onclick="mostrarSeccion('diagnosticos')">Diagnósticos</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#" onclick="mostrarSeccion('examenes')">Exámenes</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#" onclick="mostrarSeccion('medicamentos')">Medicamentos</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#" onclick="mostrarSeccion('plantratamiento')">Planes de Tratamiento</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#" onclick="mostrarSeccion('resultado_lab')">Resultados de Laboratorio</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container mt-4">
+        <!-- Sección de Pacientes -->
+        <div id="seccion-pacientes" class="seccion">
+            <h2>Gestión de Pacientes</h2>
+            <button class="btn btn-primary mb-3" onclick="mostrarFormularioPaciente()">Nuevo Paciente</button>
+            
+            <div id="formulario-paciente" class="card mb-3" style="display: none;">
+                <div class="card-body">
+                    <h5 class="card-title">Datos del Paciente</h5>
+                    <form id="paciente-form">
+                        <input type="hidden" id="paciente-id">
+                        <div class="mb-3">
+                            <label for="paciente-id" class="form-label">ID</label>
+                            <input type="number" class="form-control" id="paciente-id" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="nombre" class="form-label">Nombre</label>
+                            <input type="text" class="form-control" id="nombre" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="direccion" class="form-label">Dirección</label>
+                            <input type="text" class="form-control" id="direccion" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="telefono" class="form-label">Teléfono</label>
+                            <input type="number" class="form-control" id="telefono" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="ciudad" class="form-label">Ciudad</label>
+                            <select class="form-control" id="ciudad" required>
+                                <option value="">Seleccione una ciudad</option>
+                            </select>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Guardar</button>
+                        <button type="button" class="btn btn-secondary" onclick="ocultarFormularioPaciente()">Cancelar</button>
+                    </form>
+                </div>
+            </div>
+
+            <div class="table-responsive">
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Nombre</th>
+                            <th>Dirección</th>
+                            <th>Teléfono</th>
+                            <th>Ciudad</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tabla-pacientes"></tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Sección de Diagnósticos -->
+        <div id="seccion-diagnosticos" class="seccion" style="display: none;">
+            <h2>Gestión de Diagnósticos</h2>
+            <button class="btn btn-primary mb-3" onclick="mostrarFormularioDiagnostico()">Nuevo Diagnóstico</button>
+            
+            <div id="formulario-diagnostico" class="card mb-3" style="display: none;">
+                <div class="card-body">
+                    <h5 class="card-title">Datos del Diagnóstico</h5>
+                    <form id="diagnostico-form">
+                        <input type="hidden" id="diagnostico-id">
+                        <div class="mb-3">
+                            <label for="paciente" class="form-label">Paciente</label>
+                            <select class="form-control" id="paciente" required>
+                                <option value="">Seleccione un paciente</option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label for="condicion" class="form-label">Condición</label>
+                            <textarea class="form-control" id="condicion" required></textarea>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Guardar</button>
+                        <button type="button" class="btn btn-secondary" onclick="ocultarFormularioDiagnostico()">Cancelar</button>
+                    </form>
+                </div>
+            </div>
+
+            <div class="table-responsive">
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Paciente</th>
+                            <th>Condición</th>
+                            <th>Fecha</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tabla-diagnosticos"></tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Sección de Exámenes -->
+        <div id="seccion-examenes" class="seccion" style="display: none;">
+            <h2>Gestión de Exámenes</h2>
+            <button class="btn btn-primary mb-3" onclick="mostrarFormularioExamen()">Nuevo Examen</button>
+            <div id="formulario-examen" class="card mb-3" style="display: none;">
+                <div class="card-body">
+                    <h5 class="card-title">Datos del Examen</h5>
+                    <form id="examen-form">
+                        <input type="hidden" id="examen-id">
+                        <div class="mb-3">
+                            <label for="examen-nombre" class="form-label">Nombre del Examen</label>
+                            <input type="text" class="form-control" id="examen-nombre" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="examen-fecha" class="form-label">Fecha de Realización</label>
+                            <input type="date" class="form-control" id="examen-fecha" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="examen-paciente" class="form-label">Paciente</label>
+                            <select class="form-control" id="examen-paciente" required>
+                                <option value="">Seleccione un paciente</option>
+                            </select>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Guardar</button>
+                        <button type="button" class="btn btn-secondary" onclick="ocultarFormularioExamen()">Cancelar</button>
+                    </form>
+                </div>
+            </div>
+            <div class="table-responsive">
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Nombre</th>
+                            <th>Fecha</th>
+                            <th>Paciente</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tabla-examenes"></tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Sección de Medicamentos -->
+        <div id="seccion-medicamentos" class="seccion" style="display: none;">
+            <h2>Gestión de Medicamentos</h2>
+            <button class="btn btn-primary mb-3" onclick="mostrarFormularioMedicamento()">Nuevo Medicamento</button>
+            <div id="formulario-medicamento" class="card mb-3" style="display: none;">
+                <div class="card-body">
+                    <h5 class="card-title">Datos del Medicamento</h5>
+                    <form id="medicamento-form">
+                        <input type="hidden" id="medicamento-id">
+                        <div class="mb-3">
+                            <label for="medicamento-paciente" class="form-label">Paciente</label>
+                            <select class="form-control" id="medicamento-paciente" required>
+                                <option value="">Seleccione un paciente</option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label for="medicamento-desc" class="form-label">Descripción</label>
+                            <input type="text" class="form-control" id="medicamento-desc" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="medicamento-dosis" class="form-label">Dosis</label>
+                            <input type="text" class="form-control" id="medicamento-dosis" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="medicamento-instrucciones" class="form-label">Instrucciones</label>
+                            <input type="text" class="form-control" id="medicamento-instrucciones" required>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Guardar</button>
+                        <button type="button" class="btn btn-secondary" onclick="ocultarFormularioMedicamento()">Cancelar</button>
+                    </form>
+                </div>
+            </div>
+            <div class="table-responsive">
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Paciente</th>
+                            <th>Descripción</th>
+                            <th>Dosis</th>
+                            <th>Instrucciones</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tabla-medicamentos"></tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Sección de Plan de Tratamiento -->
+        <div id="seccion-plantratamiento" class="seccion" style="display: none;">
+            <h2>Gestión de Planes de Tratamiento</h2>
+            <button class="btn btn-primary mb-3" onclick="mostrarFormularioPlan()">Nuevo Plan</button>
+            <div id="formulario-plan" class="card mb-3" style="display: none;">
+                <div class="card-body">
+                    <h5 class="card-title">Datos del Plan de Tratamiento</h5>
+                    <form id="plan-form">
+                        <input type="hidden" id="plan-id">
+                        <div class="mb-3">
+                            <label for="plan-paciente" class="form-label">Paciente</label>
+                            <select class="form-control" id="plan-paciente" required>
+                                <option value="">Seleccione un paciente</option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label for="plan-diagnostico" class="form-label">Diagnóstico</label>
+                            <select class="form-control" id="plan-diagnostico" required>
+                                <option value="">Seleccione un diagnóstico</option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label for="plan-tratamiento" class="form-label">Tratamiento</label>
+                            <input type="text" class="form-control" id="plan-tratamiento" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="plan-fecha" class="form-label">Fecha</label>
+                            <input type="date" class="form-control" id="plan-fecha" required>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Guardar</button>
+                        <button type="button" class="btn btn-secondary" onclick="ocultarFormularioPlan()">Cancelar</button>
+                    </form>
+                </div>
+            </div>
+            <div class="table-responsive">
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Paciente</th>
+                            <th>Diagnóstico</th>
+                            <th>Tratamiento</th>
+                            <th>Fecha</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tabla-plantratamiento"></tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Sección de Resultados de Laboratorio -->
+        <div id="seccion-resultado_lab" class="seccion" style="display: none;">
+            <h2>Gestión de Resultados de Laboratorio</h2>
+            <button class="btn btn-primary mb-3" onclick="mostrarFormularioResultado()">Nuevo Resultado</button>
+            <div id="formulario-resultado" class="card mb-3" style="display: none;">
+                <div class="card-body">
+                    <h5 class="card-title">Datos del Resultado de Laboratorio</h5>
+                    <form id="resultado-form">
+                        <input type="hidden" id="resultado-id">
+                        <div class="mb-3">
+                            <label for="paciente" class="form-label">Paciente</label>
+                            <select class="form-control" id="paciente" required>
+                                <option value="">Seleccione un paciente</option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label for="resultado-examen" class="form-label">Examen</label>
+                            <input class="form-control" id="resultado-examen" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="resultado-valor" class="form-label">Valor</label>
+                            <input type="number" class="form-control" id="resultado-valor" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="resultado-fecha" class="form-label">Fecha</label>
+                            <input type="date" class="form-control" id="resultado-fecha" required>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Guardar</button>
+                        <button type="button" class="btn btn-secondary" onclick="ocultarFormularioResultado()">Cancelar</button>
+                    </form>
+                </div>
+            </div>
+            <div class="table-responsive">
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>Paciente</th>
+                            <th>Examen</th>
+                            <th>Valor</th>
+                            <th>Fecha</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tabla-resultado_lab"></tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal de confirmación -->
+    <div class="modal fade" id="confirmModal" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Confirmar eliminación</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    ¿Está seguro que desea eliminar este registro?
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="button" class="btn btn-danger" id="confirmDelete">Eliminar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="app.js"></script>
+</body>
+</html> 
